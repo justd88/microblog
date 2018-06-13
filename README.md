@@ -6,7 +6,7 @@
 - Docker-compose
 
 **installation:**
-$ git clone http://https://github.com/justd88/microblog.git
+$ git clone https://github.com/justd88/microblog.git
 $ cd microblog
 $ docker-compose up
 
