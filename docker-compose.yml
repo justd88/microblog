@@ -1,0 +1,80 @@
+version: '2'
+services:
+    composer:
+        image: "composer"
+        volumes:
+            - "./backend/app/src:/app"
+        command: install
+    php:
+        image: webdevops/php-apache-dev:alpine
+        volumes:
+            - "./backend/app/src:/var/www/html"
+        environment:
+            - WEB_DOCUMENT_ROOT=/var/www/html
+        ports:
+            - "9090:80"
+        depends_on:
+            - mysqldb
+    myadmin:
+        image: phpmyadmin/phpmyadmin
+        container_name: phpmyadmin
+        ports:
+            - "8080:80"
+        environment:
+            - PMA_ARBITRARY=1
+            - PMA_HOST=${MYSQL_HOST}
+        restart: always
+        depends_on:
+            - mysqldb
+
+    mysqldb:
+        image: mysql:${MYSQL_VERSION}
+        container_name: ${MYSQL_HOST}
+        restart: always
+        env_file:
+            - ".env"
+        environment:
+            - MYSQL_DATABASE=${MYSQL_DATABASE}
+            - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+            - MYSQL_USER=${MYSQL_USER}
+            - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+        ports:
+            - "8989:3306"
+        volumes:
+            - "./backend/db/mysql:/var/lib/mysql"
+            - "./backend/db/import:/docker-entrypoint-initdb.d"
+
+    frontend:
+        image: microblog/frontend:latest
+        build: .
+        ports:
+         - "3000:3000"
+        volumes:
+          - ./frontend:/app
+
+    hub:
+        image: selenium/hub
+        ports:
+            - 4444:4444
+
+    chrome:
+        image: selenium/node-chrome
+        ports:
+            - 5900
+        environment:
+            - HUB_PORT_4444_TCP_ADDR=hub
+            - HUB_PORT_4444_TCP_PORT=4444
+        depends_on:
+            - hub
+
+    webdriverio:
+      image: huli/webdriverio:latest
+      depends_on:
+          - chrome
+          - hub
+          - frontend
+      environment:
+          - HUB_PORT_4444_TCP_ADDR=hub
+          - HUB_PORT_4444_TCP_PORT=4444
+      volumes:
+          - ./frontend:/app
