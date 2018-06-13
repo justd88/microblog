@@ -91,3 +91,4 @@ typings/
 .env
 
 errorShots/
+backend/db/mysql/
