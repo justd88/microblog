@@ -1,11 +1,5 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 class Connection extends AbstractModel {
 
     private $_from;
@@ -20,7 +14,7 @@ class Connection extends AbstractModel {
     }
 
     /**
-     * 
+     *
      * @param int $from
      * @param int $to
      * @return $this
@@ -37,7 +31,7 @@ class Connection extends AbstractModel {
     }
 
     /**
-     * 
+     *
      * @return int
      */
     public function getFrom(): int {
@@ -45,7 +39,7 @@ class Connection extends AbstractModel {
     }
 
     /**
-     * 
+     *
      * @return int
      */
     public function getTo(): int {
@@ -53,7 +47,7 @@ class Connection extends AbstractModel {
     }
 
     /**
-     * 
+     *
      * @param int $from
      * @return $this
      */
@@ -63,7 +57,7 @@ class Connection extends AbstractModel {
     }
 
     /**
-     * 
+     *
      * @param int $to
      * @return $this
      */
